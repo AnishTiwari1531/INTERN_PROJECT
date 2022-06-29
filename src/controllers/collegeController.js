@@ -9,10 +9,6 @@ const isValid = function (value) {
     return true;
 }
 
-const isValidRequestBody = function (requestBody) {
-    return Object.keys(requestBody).length > 0
-}
-
 //------------------------regex---------------------------//
 
 let nameRegex = /^[#.a-zA-Z\s,-]+$/
@@ -77,10 +73,11 @@ module.exports.createCollege = async function (req, res){
 module.exports.getCollegeDetails = async function (req, res) {
     try {
         const filterQuery = { isDeleted: false }
-        const queryParam = req.query
-        if (!isValidRequestBody(queryParam)) {
-          return  res.status(400).send({ status: false, msg: "No Query Param Received" });
-        }
+        let data = req.query
+        if (Object.keys(data).length===0) {
+            return  res.status(400).send({ status: false, msg: "No Query Param Received" });
+          }
+  
 
       
         const name1 = req.query.collegeName
