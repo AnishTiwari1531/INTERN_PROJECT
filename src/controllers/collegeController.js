@@ -92,14 +92,14 @@ module.exports.getCollegeDetails = async function (req, res) {
         const college = await collegeModel.findOne(filterQuery)
     
         if (!college) {
-            res.status(400).send({ status: false, msg: "College details doesn't exist ⚠️⚠️" });
+            res.status(404).send({ status: false, msg: "College details doesn't exist ⚠️⚠️" });
             return;
         }
 
         const interns = await internModel.find({ collegeId: college._id, isDeleted: false }, { name: 1, email: 1, mobile: 1 })
 
         if (interns.length === 0) {
-            res.status(400).send({ status: false, msg: "Interns details doesn't exist ⚠️⚠️" });
+            res.status(404).send({ status: false, msg: "Interns details doesn't exist ⚠️⚠️" });
             return;
         }
 

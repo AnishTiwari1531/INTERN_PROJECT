@@ -44,7 +44,7 @@ module.exports.createIntern = async function (req, res) {
             return res.status(400).send({ Status: false, message: "Please provide mobile number ⚠️⚠️" })
         }
         if (!mobileRegex.test(mobile)) {
-            return res.status(400).send({ Status: false, message: "Please enter valid mobile number ⚠️⚠️" })
+            return res.status(400).send({ Status: false, message: "Please enter valid Indian mobile number ⚠️⚠️" })
         }
         if (mobile) {
             let checkmobile = await internModel.findOne({ mobile: mobile })
