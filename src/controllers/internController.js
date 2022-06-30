@@ -17,11 +17,16 @@ module.exports.createIntern = async function (req, res) {
 
         if (Object.keys(data).length === 0)
             return res.status(400).send({ Status: false, message: "Please provide all the required data ⚠️⚠️" })
-        
+
         if (!name || name == "")
             return res.status(400).send({ Status: false, message: "Please provide name ⚠️⚠️" })
         else
             data.name = data.name.trim()
+
+        if (!email || email == "")
+            return res.status(400).send({ Status: false, message: "Please provide email ⚠️⚠️" })
+        else
+            data.email = data.email.trim()
 
         if (!emailRegex.test(email)) {
             return res.status(400).send({ Status: false, message: "Please enter valid email ⚠️⚠️" })
@@ -34,7 +39,7 @@ module.exports.createIntern = async function (req, res) {
                 return res.status(400).send({ Status: false, message: "Please provide another email, this email has been used ⚠️⚠️" })
             }
         }
-        
+
         if (!mobile || mobile == "") {
             return res.status(400).send({ Status: false, message: "Please provide mobile number ⚠️⚠️" })
         }
@@ -50,21 +55,25 @@ module.exports.createIntern = async function (req, res) {
         }
         else { data.mobile = data.mobile.trim() }
 
-        if (!collegeName || collegeName == "") { 
-            return res.status(400).send({ Status: false, message: "Please provide collegeName ⚠️⚠️" }) 
+        if (!collegeName || collegeName == "") {
+            return res.status(400).send({ Status: false, message: "Please provide collegeName ⚠️⚠️" })
         }
         else { data.collegeName = data.collegeName.trim() }
 
         if (isDeleted == true) {
             res.status(400).send({ status: false, msg: "Cannot input isDeleted as true while registering ⚠️⚠️" });
-            return }
+            return
+        }
 
-        let college = await collegeModel.findOne({name:collegeName})
-        data.collegeId = college["_id"]
+        let college = await collegeModel.findOne({ name: collegeName })
+        if(!college){
+            return res.status(400).send({status: false, msg : "Please enter valid collegeName ⚠️⚠️"})
+        }
+        else data.collegeId = college["_id"]
 
         let newIntern = await internModel.create(data)
         let savedData = await internModel.findOne(newIntern).select({ createdAt: 0, updatedAt: 0, __v: 0, _id: 0 })
-        res.status(201).send({ status: true, msg : "Intern Registered Successfully ✅✅", data: savedData })
+        res.status(201).send({ status: true, msg: "Intern Registered Successfully ✅✅", data: savedData })
     }
     catch (error) {
         res.status(500).send({ status: false, error: error.message })
