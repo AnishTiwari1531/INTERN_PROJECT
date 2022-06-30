@@ -13,7 +13,7 @@ let emailRegex = /^[a-z]{1}[a-z0-9._]{1,100}[@]{1}[a-z]{2,15}[.]{1}[a-z]{2,10}$/
 module.exports.createIntern = async function (req, res) {
     try {
         let data = req.body
-        let { name, mobile, email, collegeName } = data
+        let { name, mobile, email, collegeName, isDeleted } = data
 
         if (Object.keys(data).length === 0)
             return res.status(400).send({ Status: false, message: "Please provide all the required data ⚠️⚠️" })
@@ -55,10 +55,15 @@ module.exports.createIntern = async function (req, res) {
         }
         else { data.collegeName = data.collegeName.trim() }
 
+        if (isDeleted == true) {
+            res.status(400).send({ status: false, msg: "Cannot input isDeleted as true while registering ⚠️⚠️" });
+            return }
+
         let college = await collegeModel.findOne({name:collegeName})
         data.collegeId = college["_id"]
 
-        let savedData = await internModel.create(data)
+        let newIntern = await internModel.create(data)
+        let savedData = await internModel.findOne(newIntern).select({ createdAt: 0, updatedAt: 0, __v: 0, _id: 0 })
         res.status(201).send({ status: true, msg : "Intern Registered Successfully ✅✅", data: savedData })
     }
     catch (error) {
