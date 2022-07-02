@@ -10,7 +10,7 @@ let emailRegex = /^[a-z]{1}[a-z0-9._]{1,100}[@]{1}[a-z]{2,15}[.]{1}[a-z]{2,10}$/
 
 //--------------------------------------------------------//
 
-module.exports.createIntern = async function (req, res) {
+const createIntern = async function (req, res) {
     try {
         let data = req.body
         let { name, mobile, email, collegeName } = data
@@ -75,4 +75,7 @@ module.exports.createIntern = async function (req, res) {
     }
 }
 
+
+//-------------------------------------------------------------------------//
+module.exports.createIntern = createIntern
 //-------------------------------------------------------------------------//

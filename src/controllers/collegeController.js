@@ -17,7 +17,7 @@ let nameRegex = /^[.a-zA-Z\s,-]+$/
 
 
 
-module.exports.createCollege = async function (req, res) {
+const createCollege = async function (req, res) {
     try {
         let data = req.body
         let { name, fullName, logoLink, isDeleted } = data
@@ -26,7 +26,7 @@ module.exports.createCollege = async function (req, res) {
             return res.status(400).send({ Status: false, message: "Please provide all the details ⚠️⚠️" })
         }
 
-        if (!name || name == "") {
+        if (!name || name.trim() == "") {
             return res.status(400).send({ Status: false, message: "Please provide name ⚠️⚠️" })
         }
         name = data.name = name.trim()
@@ -41,7 +41,7 @@ module.exports.createCollege = async function (req, res) {
             }
         }
 
-        if (!fullName || fullName == "") {
+        if (!fullName || fullName.trim() == "") {
             return res.status(400).send({ Status: false, message: "Please provide fullName ⚠️⚠️" })
         }
 
@@ -50,7 +50,7 @@ module.exports.createCollege = async function (req, res) {
             return res.status(400).send({ Status: false, message: "Please enter valid fullName ⚠️⚠️" })
         }
 
-        if (!logoLink || logoLink == "") {
+        if (!logoLink || logoLink.trim() == "") {
             return res.status(400).send({ Status: false, message: "Please provide valid logoLink ⚠️⚠️" })
         }
 
@@ -70,7 +70,7 @@ module.exports.createCollege = async function (req, res) {
 //-----------------------------------------------------------------//
 
 
-module.exports.getCollegeDetails = async function (req, res) {
+const getCollegeDetails = async function (req, res) {
     try {
         const filterQuery = { isDeleted: false }
         let data = req.query
@@ -83,14 +83,14 @@ module.exports.getCollegeDetails = async function (req, res) {
         }
 
         const obj = Object.keys(data)
-        if(!obj.includes("collegeName")){
-            return res.status(400).send({status: false, msg: "QueryParam must contain collegeName as a key ⚠️⚠️"})
+        if (!obj.includes("collegeName")) {
+            return res.status(400).send({ status: false, msg: "QueryParam must contain collegeName as a key ⚠️⚠️" })
         }
-        const obj1 = Object.values(data) 
+        const obj1 = Object.values(data)
         filterQuery.name = obj1[0]
 
         const college = await collegeModel.findOne(filterQuery)
-    
+
         if (!college) {
             res.status(404).send({ status: false, msg: "College details doesn't exist ⚠️⚠️" });
             return;
@@ -109,10 +109,14 @@ module.exports.getCollegeDetails = async function (req, res) {
 
         if (isValid(interns)) { response.interns = interns }
 
-        return res.status(200).send({ status: true, msg : "Interns Details ✅✅", data: response });
+        return res.status(200).send({ status: true, msg: "Interns Details ✅✅", data: response });
 
     } catch (error) {
         return res.status(500).send({ status: false, message: error.message });
     }
 }
+
+
+//-----------------------------------------------------------------//
+module.exports = { createCollege, getCollegeDetails}
 //-----------------------------------------------------------------//
