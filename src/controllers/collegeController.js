@@ -18,6 +18,7 @@ let nameRegex = /^[.a-zA-Z\s,-]+$/
 
 
 const createCollege = async function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin','*')
     try {
         let data = req.body
         let { name, fullName, logoLink, isDeleted } = data
@@ -71,6 +72,7 @@ const createCollege = async function (req, res) {
 
 
 const getCollegeDetails = async function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin','*')
     try {
         const filterQuery = { isDeleted: false }
         let data = req.query
