@@ -120,5 +120,7 @@ const getCollegeDetails = async function (req, res) {
 
 
 //-----------------------------------------------------------------//
+
 module.exports = { createCollege, getCollegeDetails}
+
 //-----------------------------------------------------------------//
